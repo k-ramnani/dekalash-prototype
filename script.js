@@ -615,3 +615,14 @@ function openSlotBooking() {
 }
 
 renderInline();
+
+/* ---------- Mobile sticky CTA bar: show after hero scrolls out ---------- */
+const heroSection = document.querySelector(".hero");
+const mobileCta = document.getElementById("mobileCta");
+if (heroSection && mobileCta && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver(
+    ([entry]) => mobileCta.classList.toggle("show", !entry.isIntersecting),
+    { threshold: 0 }
+  );
+  io.observe(heroSection);
+}
