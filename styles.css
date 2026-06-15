@@ -491,10 +491,22 @@ input, select, textarea { font-size: 16px; }
 .bk-confirm-svc-info a { color: var(--magenta); font-weight: 600; }
 .bk-confirm-add { display: block; color: var(--magenta) !important; font-weight: 600; margin-top: 4px; }
 .bk-confirm-price { font-family: var(--font-ui); font-size: 18px; font-weight: 700; color: var(--ink); }
-.bk-pay { display: flex; flex-direction: column; gap: 8px; }
+.bk-pay { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 .bk-pay-row { display: flex; justify-content: space-between; font-size: 15px; }
 .bk-pay-now { color: #1f9d52; font-weight: 700; }
 .bk-pay-row:last-child { color: var(--grey); }
+.bk-pay-total { font-family: var(--font-ui); font-weight: 700; color: var(--ink); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+
+/* card on file + policy */
+.bk-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.bk-card-badge { display: inline-flex; align-items: center; gap: 5px; background: #f1f9f3; color: #1f9d52; font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; padding: 5px 11px; border-radius: 100px; }
+.bk-note-muted { color: var(--grey); font-size: 13px; font-weight: 300; margin-bottom: 12px; line-height: 1.5; }
+.bk-card .bk-input { margin-bottom: 10px; }
+.bk-card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bk-card-row .bk-input { margin-bottom: 0; }
+.bk-policy { margin-top: 16px; }
+.bk-policy strong { color: var(--ink); }
+.bk-nothing-now { display: flex; align-items: center; gap: 7px; color: #1f9d52; font-size: 13px; font-weight: 600; margin-top: 12px; }
 
 /* success */
 .bk-success { text-align: center; padding: 8px 2px; }

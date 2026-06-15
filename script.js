@@ -97,6 +97,7 @@ const ICON = {
   clock: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   edit: '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   check: '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
 };
 
 /* ---------- State ---------- */
@@ -422,6 +423,27 @@ function renderConfirm() {
         <span class="bk-reserve-pill" id="resTimer">${ICON.clock} <b>10:00</b></span>
       </div>
       <div class="bk-divider"></div>
+
+      <div class="bk-card">
+        <div class="bk-card-head">
+          <span class="bk-label">Card on file</span>
+          <span class="bk-card-badge">${ICON.lock} No charge today</span>
+        </div>
+        <p class="bk-note-muted">We keep a card on file to secure your appointment. You won&rsquo;t be charged today — no deposit required.</p>
+        <input class="bk-input" id="cardNum" placeholder="Card number" inputmode="numeric" autocomplete="cc-number" maxlength="23" />
+        <div class="bk-card-row">
+          <input class="bk-input" id="cardExp" placeholder="MM / YY" inputmode="numeric" autocomplete="cc-exp" maxlength="7" />
+          <input class="bk-input" id="cardCvc" placeholder="CVC" inputmode="numeric" autocomplete="cc-csc" maxlength="4" />
+        </div>
+      </div>
+
+      <label class="bk-consent bk-policy">
+        <input type="checkbox" id="policyChk" />
+        <span>I accept the <strong>cancellation &amp; no-show policy</strong>: cancellations within 12 hours are charged 50% of the service price, and no-shows are charged 100%.</span>
+      </label>
+
+      <div class="bk-divider"></div>
+      <span class="bk-label">Booking summary</span>
       <div class="bk-confirm-svc">
         <div class="bk-confirm-svc-info">
           <strong>${state.service.name}</strong>
@@ -430,17 +452,45 @@ function renderConfirm() {
         </div>
         <span class="bk-confirm-price">$${total.toFixed(2)}</span>
       </div>
-      <div class="bk-divider"></div>
       <div class="bk-pay">
-        <div class="bk-pay-row"><span class="bk-pay-now">Pay Now</span><span class="bk-pay-now">$0</span></div>
-        <div class="bk-pay-row"><span>Pay at Venue</span><span>$${total.toFixed(2)}</span></div>
+        <div class="bk-pay-row bk-pay-total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+        <div class="bk-pay-row"><span class="bk-pay-now">Due today</span><span class="bk-pay-now">$0.00</span></div>
+        <div class="bk-pay-row"><span>Pay at venue</span><span>$${total.toFixed(2)}</span></div>
       </div>
+      <p class="bk-nothing-now">${ICON.lock} Nothing to be paid now — your card is only kept on file, no deposit is taken.</p>
     </div>`;
-  elFoot.innerHTML = `<button class="bk-cta" id="confirmBtn">Confirm Booking</button>`;
+  elFoot.innerHTML = `<button class="bk-cta" id="confirmBtn" disabled>Confirm Booking</button>`;
 
   document.getElementById("editDetails").addEventListener("click", () => goTo("details"));
   document.getElementById("confirmBtn").addEventListener("click", renderSuccess);
+  bindConfirmInputs();
   startReserveTimer();
+}
+
+/* Card field formatting + enable Confirm only when card + policy are complete */
+function bindConfirmInputs() {
+  const num = document.getElementById("cardNum");
+  const exp = document.getElementById("cardExp");
+  const cvc = document.getElementById("cardCvc");
+  const chk = document.getElementById("policyChk");
+  const btn = document.getElementById("confirmBtn");
+  const digits = (s) => s.replace(/\D/g, "");
+  const validate = () => {
+    const ok = digits(num.value).length >= 12 && digits(exp.value).length >= 4 &&
+               digits(cvc.value).length >= 3 && chk.checked;
+    btn.disabled = !ok;
+  };
+  num.addEventListener("input", () => {
+    num.value = digits(num.value).slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
+    validate();
+  });
+  exp.addEventListener("input", () => {
+    const d = digits(exp.value).slice(0, 4);
+    exp.value = d.length > 2 ? `${d.slice(0, 2)} / ${d.slice(2)}` : d;
+    validate();
+  });
+  cvc.addEventListener("input", () => { cvc.value = digits(cvc.value).slice(0, 4); validate(); });
+  chk.addEventListener("change", validate);
 }
 
 function startReserveTimer() {
