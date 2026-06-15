@@ -355,9 +355,11 @@ img { max-width: 100%; display: block; }
 /* shared form bits */
 .bk-input {
   width: 100%; padding: 15px 16px; border: 1.5px solid var(--line); border-radius: var(--radius);
-  font-family: var(--font-body); font-size: 15px; color: var(--text); background: #fbfafb;
+  font-family: var(--font-body); font-size: 16px; color: var(--text); background: #fbfafb;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
+/* Prevent iOS Safari auto-zoom on focus: form fields must be >= 16px */
+input, select, textarea { font-size: 16px; }
 .bk-input:focus { outline: none; border-color: var(--magenta); box-shadow: 0 0 0 3px rgba(200,0,161,.12); }
 .bk-cta {
   width: 100%; padding: 15px; border: none; border-radius: var(--radius);
