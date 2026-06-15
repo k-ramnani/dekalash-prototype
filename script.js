@@ -267,6 +267,7 @@ function renderAddons() {
 
 /* ---------- Step 4: Provider ---------- */
 function renderProvider() {
+  if (!state.provider) state.provider = PROVIDERS[0].name; // default: First Available
   elBody.innerHTML = `
     <div class="bk-svc-summary">
       <h3>${state.service.name}</h3>
